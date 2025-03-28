@@ -14,7 +14,7 @@ import AuthImagePattern from "../components/AuthImagePattern";
 const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullname: "",
+    fullName: "",
     email: "",
     password: "",
   });
@@ -29,13 +29,16 @@ const SignUpPage = () => {
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
-      {/* left side*/}
+      {/* left side */}
       <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
-          {/* logo */}
+          {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <div
+                className="size-12 rounded-xl bg-primary/10 flex items-center justify-center 
+              group-hover:bg-primary/20 transition-colors"
+              >
                 <MessageSquare className="size-6 text-primary" />
               </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
@@ -44,19 +47,19 @@ const SignUpPage = () => {
               </p>
             </div>
           </div>
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* full name */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Full Name</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="size-5 text-base-content/40" />
+                  <User className="w-5 h-5 text-base-content/40" />
                 </div>
                 <input
                   type="text"
-                  className={`input input-bordered w-full pl-10`}
+                  className={`input input-bordered w-full pl-12`}
                   placeholder="John Doe"
                   value={formData.fullName}
                   onChange={(e) =>
@@ -65,7 +68,7 @@ const SignUpPage = () => {
                 />
               </div>
             </div>
-            {/* email */}
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Email</span>
@@ -85,7 +88,7 @@ const SignUpPage = () => {
                 />
               </div>
             </div>
-            {/* password */}
+
             <div className="form-control">
               <label className="label">
                 <span className="label-text font-medium">Password</span>
@@ -116,7 +119,7 @@ const SignUpPage = () => {
                 </button>
               </div>
             </div>
-            {/* button */}
+
             <button
               type="submit"
               className="btn btn-primary w-full"
@@ -143,7 +146,9 @@ const SignUpPage = () => {
           </div>
         </div>
       </div>
+
       {/* right side */}
+
       <AuthImagePattern
         title="Join our community"
         subtitle="Connect with friends, share moments, and stay in touch with your loved ones."
