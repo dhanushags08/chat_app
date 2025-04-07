@@ -4,9 +4,9 @@ import { generate_token } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
-  const { full_name, email, password } = req.body;
+  const { fullName, email, password } = req.body;
   try {
-    if (!full_name || !email || !password) {
+    if (!fullName || !email || !password) {
       return res.status(400).json({
         message: "All fields are required",
       });
@@ -27,21 +27,21 @@ export const signup = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const new_user = new User({
-      full_name: full_name,
+    const newUser = new User({
+      fullName: fullName,
       email: email,
       password: hashedPassword,
     });
 
-    if (new_user) {
-      generate_token(new_user._id, res);
-      await new_user.save();
+    if (newUser) {
+      generate_token(newUser._id, res);
+      await newUser.save();
 
       res.status(201).json({
-        _id: new_user._id,
-        full_name: new_user.full_name,
-        email: new_user.email,
-        profile_pic: new_user.profile_pic,
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
       });
     } else {
       res.status(400).json({
@@ -80,7 +80,7 @@ export const login = async (req, res) => {
     // Respond with user details
     res.status(200).json({
       _id: user._id,
-      full_name: user.full_name,
+      fullName: user.fullName,
       email: user.email,
       profile_pic: user.profile_pic,
     });
