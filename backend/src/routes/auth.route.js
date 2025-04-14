@@ -3,7 +3,7 @@ import {
   signup,
   login,
   logout,
-  update_profile,
+  updateProfile,
   check_auth,
 } from "../controllers/auth.controller.js";
 import { protect_route } from "../middleware/auth.middleware.js";
@@ -14,7 +14,7 @@ router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
 
-router.put("/update-profile", protect_route, update_profile);
+router.put("/update-profile", protect_route, updateProfile);
 
 router.get("/check", protect_route, check_auth);
 

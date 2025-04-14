@@ -1,6 +1,6 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
-import { generate_token } from "../lib/utils.js";
+import { generateToken } from "../lib/utils.js";
 import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
@@ -34,7 +34,7 @@ export const signup = async (req, res) => {
     });
 
     if (newUser) {
-      generate_token(newUser._id, res);
+      generateToken(newUser._id, res);
       await newUser.save();
 
       res.status(201).json({
@@ -75,14 +75,14 @@ export const login = async (req, res) => {
     }
 
     // Generate and set token
-    generate_token(user._id, res);
+    generateToken(user._id, res);
 
     // Respond with user details
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       email: user.email,
-      profile_pic: user.profile_pic,
+      profilePic: user.profilePic,
     });
   } catch (error) {
     console.error("Error in login:", error.message);
@@ -105,27 +105,37 @@ export const logout = (req, res) => {
   }
 };
 
-export const update_profile = async (req, res) => {
+export const updateProfile = async (req, res) => {
   try {
-    const { profile_pic } = req.body;
+    const { profilePic } = req.body;
     const user_id = req.user._id;
 
-    if (!profile_pic) {
+    if (!profilePic) {
       return res.status(400).json({ message: "Profile pic is required" });
     }
 
-    const upload_response = await cloudinary.uploader.upload(profil_pic);
-    const updated_user = await User.findByIdAndUpdate(
-      user_id,
-      {
-        profile_pic: upload_response.secure_url,
-      },
-      { new: true }
-    );
+    try {
+      const upload_response = await cloudinary.uploader.upload(profilePic);
+      const updated_user = await User.findByIdAndUpdate(
+        user_id,
+        {
+          profilePic: upload_response.secureUrl,
+        },
+        { new: true }
+      ).select("-password");
 
-    res.status(200).json(updated_user);
+      res.status(200).json({
+        _id: updated_user._id,
+        fullName: updated_user.fullName,
+        email: updated_user.email,
+        profilePic: updated_user.profilePic,
+      });
+    } catch (uploadError) {
+      console.error("Error uploading image:", uploadError);
+      return res.status(500).json({ message: "Error uploading image" });
+    }
   } catch (error) {
-    console.log("Error in update_profile", error.message);
+    console.log("Error in updateProfile", error.message);
     res.status(500).json({
       message: "internal server error",
     });
