@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
+import cloudinary from "../lib/cloudinary.js";
 
 export const get_users_for_sidebar = async (req, res) => {
   try {
@@ -20,12 +21,12 @@ export const get_users_for_sidebar = async (req, res) => {
 export const get_messages = async (req, res) => {
   try {
     const { id: user_to_chat_id } = req.params.id;
-    const sender_id = req.user._id;
+    const senderId = req.user._id;
 
     const messages = await Message.find({
       $or: [
-        { sender_id: sender_id, receiver_id: user_to_chat_id },
-        { sender_id: user_to_chat_id, receiver_id: sender_id },
+        { senderId: senderId, receiverId: user_to_chat_id },
+        { senderId: user_to_chat_id, receiverId: senderId },
       ],
     });
 
@@ -43,21 +44,21 @@ export const get_messages = async (req, res) => {
 export const send_message = async (req, res) => {
   try {
     const { text, image } = req.body;
-    const { id: receiver_id } = req.params;
-    const sender_id = req.user._id;
+    const { id: receiverId } = req.params;
+    const senderId = req.user._id;
 
-    let image_url;
+    let imageUrl;
 
     if (image) {
       const upload_response = await cloudinary.uploader.upload(image);
-      image_url = upload_response.secure_url;
+      imageUrl = upload_response.secureUrl;
     }
 
     const new_message = await Message({
-      sender_id,
-      receiver_id,
+      senderId,
+      receiverId,
       text,
-      image: image_url,
+      image: imageUrl,
     });
 
     await new_message.save();
