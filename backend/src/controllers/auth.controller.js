@@ -119,7 +119,7 @@ export const updateProfile = async (req, res) => {
       const updated_user = await User.findByIdAndUpdate(
         user_id,
         {
-          profilePic: upload_response.secureUrl,
+          profilePic: upload_response.secure_url,
         },
         { new: true }
       ).select("-password");

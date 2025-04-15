@@ -33,16 +33,19 @@ const MessageInput = () => {
     if (!text.trim() && !imagePreview) return;
 
     try {
-      await sendMessage({
+      const message = await sendMessage({
         text: text.trim(),
         image: imagePreview,
       });
 
-      // Clear form
-      setText("");
-      setImagePreview(null);
-      if (fileInputRef.current) fileInputRef.current.value = "";
+      if (message) {
+        // Clear form after successful send
+        setText("");
+        setImagePreview(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
     } catch (error) {
+      // Error is already handled by useChatStore
       console.error("Failed to send message:", error);
     }
   };
